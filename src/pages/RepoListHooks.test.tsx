@@ -1,35 +1,87 @@
 import React from 'react';
-import {
-  fireEvent,
-  getByTestId,
-  getByText,
-  render,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import RepoListHooks from './RepoListHooks';
 
+// TODO: Testar se ao preencher o input com um texto e enviar, vai existir um registro na lista
+
 describe('RepoListHooks', () => {
-  it('should render RepoListHooks form', async () => {
-    const { findByTestId } = render(<RepoListHooks />);
+  // it('should render RepoListHooks form', async () => {
+  //   const { findByTestId } = render(<RepoListHooks />);
+  //   const form = await findByTestId('repo-list-form');
 
-    expect(await findByTestId('repo-list-form')).toBeTruthy();
-  });
+  //   expect(form).toBeInTheDocument();
+  // });
 
-  it('should be possible to add new repository', async () => {
-    const { container, findByTestId, findByText } = render(<RepoListHooks />);
+  // it('should add an item to repository list', async () => {
+  //   const { findByTestId, findByText } = render(<RepoListHooks />);
+
+  //   const newRepoInput = await findByTestId('new-repo');
+  //   const submitButton = await findByTestId('submit-button');
+
+  //   fireEvent.change(newRepoInput, { target: { value: 'New Repo' } });
+  //   fireEvent.click(submitButton);
+
+  //   await waitFor(async () => {
+  //     const listItem = await findByText('New Repo');
+
+  //     // Inserted list item
+  //     expect(listItem).toBeInTheDocument();
+
+  //     // Input reset
+  //     expect(newRepoInput.innerHTML).toBe('');
+  //   });
+  // });
+
+  it('should remove an item from repository list', async () => {
+    const { findByTestId, queryByText } = render(<RepoListHooks />);
+    // console.log(container.innerHTML);
 
     const newRepoInput = await findByTestId('new-repo');
-    const saveButton = await findByText('Salvar');
-    const list = await findByTestId('repo-list');
+    const submitButton = await findByTestId('submit-button');
 
-    fireEvent.change(newRepoInput, { target: { value: 'ReactJs' } });
-    fireEvent.click(saveButton);
+    // Add an item to list
+    fireEvent.change(newRepoInput, { target: { value: 'New Repo' } });
+    fireEvent.click(submitButton);
 
-    await waitFor(() => {
-      const listItem = getByText(list, 'ReactJs');
-      expect(listItem).toBeInTheDocument();
+    // Find the list item, get the delete button in it and click
+    const listItem = queryByText('New Repo')?.closest('li');
+    // console.log(listItem?.innerHTML);
+
+    await waitFor(async () => {
+      expect(listItem).toBeTruthy();
     });
 
-    console.log(container.innerHTML);
+    // const deleteBtn = listItem && getByText(listItem, 'Apagar');
+    const deleteBtn = await findByTestId('btn-remove(New Repo)');
+    expect(deleteBtn).toBeInTheDocument();
+
+    const itemDeleteBtn = await screen.findByText('Apagar');
+    itemDeleteBtn.click();
+
+    expect(listItem).not.toBeInTheDocument();
+
+    // if (deleteBtn) {
+    //   fireEvent.click(deleteBtn);
+    // }
+
+    // fireEvent.click(deleteBtn);
+
+    // Expect the item is not in the list anymore
+    // await waitForElementToBeRemoved(listItem);
+    // await waitForElementToBeRemoved(queryByText('New Repo')?.closest('li'));
+
+    // await waitFor(async () => {
+    //   expect(queryByText('New Repo')).toBeNull();
+    // });
+
+    // await waitFor(async () => {
+    //   expect(queryByText('New Repo')?.closest('li')).not.toBeInTheDocument();
+    // });
+
+    // await waitFor(async () => {
+    //   expect(getByText(container, 'New Repo')).not.toBeInTheDocument();
+    // });
+
+    // console.log(container.innerHTML);
   });
 });

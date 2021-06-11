@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 const RepoListHooks: React.FC = () => {
   const [repositories, setRepositories] = useState<string[]>([]);
@@ -14,6 +14,14 @@ const RepoListHooks: React.FC = () => {
     [newRepo, repositories]
   );
 
+  const handleRemoveItem = (repoIdx: number) => () => {
+    setRepositories(repositories.filter((_, idx) => idx !== repoIdx));
+  };
+
+  // useEffect(() => {
+  //   console.log('list changed: ', { repositories });
+  // }, [repositories]);
+
   return (
     <form data-testid="repo-list-form" onSubmit={handleSubmit}>
       <input
@@ -22,11 +30,22 @@ const RepoListHooks: React.FC = () => {
         value={newRepo}
         onChange={e => setNewRepo(e.target.value)}
       />
-      <button type="submit">Salvar</button>
+      <button data-testid="submit-button" type="submit">
+        Salvar
+      </button>
 
       <ul data-testid="repo-list">
-        {repositories.map(repo => (
-          <li key={repo}>{repo}</li>
+        {repositories.map((repo, idx) => (
+          <li key={idx}>
+            <span>{repo}</span>
+            <button
+              type="button"
+              data-testid={`btn-remove(${repo})`}
+              onClick={handleRemoveItem(idx)}
+            >
+              Apagar
+            </button>
+          </li>
         ))}
       </ul>
     </form>
