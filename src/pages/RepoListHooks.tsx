@@ -15,15 +15,16 @@ const RepoListHooks: React.FC = () => {
   );
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form data-testid="repo-list-form" onSubmit={handleSubmit}>
       <input
+        data-testid="new-repo"
         type="text"
         value={newRepo}
         onChange={e => setNewRepo(e.target.value)}
       />
       <button type="submit">Salvar</button>
 
-      <ul>
+      <ul data-testid="repo-list">
         {repositories.map(repo => (
           <li key={repo}>{repo}</li>
         ))}
