@@ -1,40 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-import { RepoList as RepoListType } from '../types/RepoList';
+import React, { useState, useCallback } from 'react';
 
 const RepoListHooks: React.FC = () => {
-  const [repositories, setRepositories] = useState<RepoListType>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [repositories, setRepositories] = useState<string[]>([]);
+  const [newRepo, setNewRepo] = useState<string>('');
 
-  const getRepositories = async () => {
-    setLoading(true);
-    const { data } = await axios.get<RepoListType>(
-      'http://api.github.com/users/alexandrehpiva/repos'
-    );
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    if (data.length) {
-      setRepositories(data);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getRepositories();
-  }, []);
-
-  if (loading) {
-    return <span>Carregando...</span>;
-  }
+      setRepositories([...repositories, newRepo]);
+      setNewRepo('');
+    },
+    [newRepo, repositories]
+  );
 
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={newRepo}
+        onChange={e => setNewRepo(e.target.value)}
+      />
+      <button type="submit">Salvar</button>
+
       <ul>
         {repositories.map(repo => (
-          <li key={repo!.id}>{repo?.name}</li>
+          <li key={repo}>{repo}</li>
         ))}
       </ul>
-    </div>
+    </form>
   );
 };
 
