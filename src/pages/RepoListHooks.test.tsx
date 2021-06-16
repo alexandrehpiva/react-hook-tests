@@ -85,5 +85,8 @@ describe('RepoListHooks', () => {
       // TODO: Expect to find a span error-message
       expect(queryByTestId('error-message')).toBeInTheDocument();
     });
+
+    // TODO: Fill the input with some text and click on submit button
+    // TODO: Expect to not find the error-message element
   });
 });

@@ -1,12 +1,28 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
+
+// type BtnTId<T extends string, I extends string | number> = `btn-${T}(${I})`;
+
+// type RepoListHooksTIds =
+//   | 'repo-list-form'
+//   | 'new-repo'
+//   | 'submit-button'
+//   | 'repo-list'
+//   | BtnTId<'remove', number>;
 
 const RepoListHooks: React.FC = () => {
   const [repositories, setRepositories] = useState<string[]>([]);
   const [newRepo, setNewRepo] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+
+      // Validate if is empty
+      if (newRepo.trim() === '') {
+        setError('The repo name cannot be empty!');
+        return;
+      }
 
       setRepositories([...repositories, newRepo]);
       setNewRepo('');
@@ -31,8 +47,9 @@ const RepoListHooks: React.FC = () => {
         onChange={e => setNewRepo(e.target.value)}
       />
       <button data-testid="submit-button" type="submit">
-        Salvar
+        Save
       </button>
+      {error && <div data-testid="error-message">{error}</div>}
 
       <ul data-testid="repo-list">
         {repositories.map((repo, idx) => (
