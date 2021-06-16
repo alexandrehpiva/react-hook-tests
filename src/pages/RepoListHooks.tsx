@@ -17,6 +17,7 @@ const RepoListHooks: React.FC = () => {
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+      setError('');
 
       // Validate if is empty
       if (newRepo.trim() === '') {
