@@ -60,12 +60,30 @@ describe('RepoListHooks', () => {
   });
 
   it('should not insert any item if the input is empty', async () => {
-    const { findByTestId } = render(<RepoListHooks />);
+    const { findByTestId, queryByTestId } = render(<RepoListHooks />);
 
-    // TODO: Find the input and make sure it is empty
-    // TODO: Find the ul repo-list and make sure it doesn't contain any li inside
-    // TODO: Find the submit button and click on it
-    // TODO: Expect to NOT find any li inside of the ul repo-list
-    // TODO: Expect to find a span error-message 
+    // Find the input and make sure it is empty
+    const input = (await findByTestId('new-repo')) as HTMLInputElement;
+    expect(input.value).toBe('');
+
+    // Find the ul repo-list and make sure it doesn't contain any li inside
+    const repoList = (await findByTestId('repo-list')) as HTMLUListElement;
+    expect(repoList.querySelector('li')).toBeFalsy();
+    // expect(repoList.innerHTML).toBe('');
+
+    // Find the submit button and click on it
+    const submitBtn = (await findByTestId(
+      'submit-button'
+    )) as HTMLButtonElement;
+    submitBtn.click();
+
+    await waitFor(async () => {
+      // Expect to NOT find any li inside of the ul repo-list
+      expect(repoList.querySelector('li')).toBeFalsy();
+      // expect(repoList.innerHTML).toBe('');
+
+      // TODO: Expect to find a span error-message
+      expect(queryByTestId('error-message')).toBeInTheDocument();
+    });
   });
 });
