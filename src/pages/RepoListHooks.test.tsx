@@ -58,4 +58,14 @@ describe('RepoListHooks', () => {
 
     expect(listItem).not.toBeInTheDocument();
   });
+
+  it('should not insert any item if the input is empty', async () => {
+    const { findByTestId } = render(<RepoListHooks />);
+
+    // TODO: Find the input and make sure it is empty
+    // TODO: Find the ul repo-list and make sure it doesn't contain any li inside
+    // TODO: Find the submit button and click on it
+    // TODO: Expect to NOT find any li inside of the ul repo-list
+    // TODO: Expect to find a span error-message 
+  });
 });
