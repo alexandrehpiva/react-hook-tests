@@ -82,11 +82,17 @@ describe('RepoListHooks', () => {
       expect(repoList.querySelector('li')).toBeFalsy();
       // expect(repoList.innerHTML).toBe('');
 
-      // TODO: Expect to find a span error-message
+      // Expect to find a span error-message
       expect(queryByTestId('error-message')).toBeInTheDocument();
     });
 
-    // TODO: Fill the input with some text and click on submit button
-    // TODO: Expect to not find the error-message element
+    // Fill the input with some text and click on submit button
+    fireEvent.change(input, { target: { value: 'New Repo' } });
+    submitBtn.click();
+
+    // Expect to not find the error-message element
+    await waitFor(async () => {
+      expect(queryByTestId('error-message')).toBeFalsy();
+    });
   });
 });
