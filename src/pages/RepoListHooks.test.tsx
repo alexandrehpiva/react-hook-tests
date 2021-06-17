@@ -1,8 +1,5 @@
-import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import RepoListHooks from './RepoListHooks';
-
-// TODO: Testar se ao preencher o input com um texto e enviar, vai existir um registro na lista
 
 describe('RepoListHooks', () => {
   it('should render RepoListHooks form', async () => {
@@ -34,7 +31,6 @@ describe('RepoListHooks', () => {
 
   it('should remove an item from repository list', async () => {
     const { findByTestId, queryByText } = render(<RepoListHooks />);
-    // console.log(container.innerHTML);
 
     const newRepoInput = await findByTestId('new-repo');
     const submitButton = await findByTestId('submit-button');
@@ -75,6 +71,7 @@ describe('RepoListHooks', () => {
     const submitBtn = (await findByTestId(
       'submit-button'
     )) as HTMLButtonElement;
+    // const submitBtn = await findByRole('button', { name: /Save/i });
     submitBtn.click();
 
     await waitFor(async () => {

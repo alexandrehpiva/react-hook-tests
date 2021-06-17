@@ -35,10 +35,6 @@ const RepoListHooks: React.FC = () => {
     setRepositories(repositories.filter((_, idx) => idx !== repoIdx));
   };
 
-  // useEffect(() => {
-  //   console.log('list changed: ', { repositories });
-  // }, [repositories]);
-
   return (
     <form data-testid="repo-list-form" onSubmit={handleSubmit}>
       <input
